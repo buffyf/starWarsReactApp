@@ -1,10 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../styles/App.css';
+import Form from "./Form";
+import Header from "./Header";
+import VehicleList from "./VehicleList"
 
 class App extends Component {
   // PROPS AND STATE
   // Set props and state below.
-  // You should set state for vehicles (empty array), value (empty string), pilot (empty) string.
+  // You should set state for vehicles (empty array), value (empty string), 
+  //pilot (empty) string.
   // Enter your code below:
 
 
@@ -42,18 +46,17 @@ class App extends Component {
   // Enter your code below:
 
   render() {
+
+
     /*
     Store vehicles state in a variable.
     Map over this variable to access the values needed to render.
     */
-    })
+
     return (
       <div className="App">
-        {/*
-        The App component needs the following:
-         jumbotron section, form section, vehicle cards section.
-         Your form will also need a header in which you will pass the state of the form upon submit.
-         */}
+        <Header title="Star Wars" subtitle="The Vehicles of Star Wars" />
+        <Form label="Enter your name, pilot" />
       </div>
     );
   }
