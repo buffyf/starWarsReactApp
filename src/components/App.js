@@ -1,15 +1,25 @@
 import React, { Component } from 'react';
 import '../styles/App.css';
-import Form from "./Form";
-import Header from "./Header";
-import VehicleList from "./VehicleList"
+
 
 class App extends Component {
   // PROPS AND STATE
   // Set props and state below.
   // You should set state for vehicles (empty array), value (empty string), 
-  //pilot (empty) string.
+  // pilot (empty) string.
   // Enter your code below:
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      vehicles: [],
+      value: '',
+      pilot: ''
+    }
+  }
+
+
+
 
 
 
@@ -17,10 +27,28 @@ class App extends Component {
   // handleNameChange below:
   // See form lesson for details.
   // Enter your code below:
+  // handle input changes- event handler
+
+  handleNameChange = e => {
+    this.setState({
+      value: e.target.value
+    })
+  }
+
+  //  submit- event handler for the button
+
+  handleSubmit = e => {
+    e.preventDefault();
+    let pilot = this.state.value;
+
+    this.setState({  // resets the value - clears the search box
+      value: "",
+      pilot: pilot
+    })
+  }
 
 
-
-  //  FORM: SUBMIT METHOD
+  // FORM: SUBMIT METHOD
   // handleSubmit below:
   // See form lesson for details.
   // Once the form is sumbited, two things need to happen: set the state of pilot to the input value.
@@ -36,6 +64,18 @@ class App extends Component {
   // You will want to use this array when you set the state of 'vehicles'. You will need this data in your render.
   // Enter your code below:
 
+  componentDidMount() {
+    fetch('https://swapi.co/api/vehicles/').then((response) => {
+      return response.json()
+    }).then((data) => {
+      let vehicles = data.results;
+      console.log(vehicles)
+      this.setState({ vehicles: vehicles })
+    })
+  }
+
+
+
 
   // RENDER
   // Before you can map over the data you've fetched, you will first need to store that 'state' in a variable.
@@ -46,20 +86,64 @@ class App extends Component {
   // Enter your code below:
 
   render() {
-
-
-    /*
-    Store vehicles state in a variable.
-    Map over this variable to access the values needed to render.
-    */
-
+    // let value = this.state.value;
+    // let {vehicles} = this.state;
+    let vehicleArray = this.state.vehicles;
+    let vehicles = vehicleArray.map((vehicles) => {
+      return (
+        /* Create the vehicle card below: */
+        <div key={vehicles.name} className="col-md-4" >
+          <div className="card">
+            <div className="card-block">
+              <h4 className="card-title">Vehicle: {vehicles.name}</h4>
+              <h5 className="card-subtitle mb-2 text-muted">Model: {vehicles.model}</h5>
+              <div className="card">
+                <div className="card-block">
+                  <h5 className="card-subtitle mb-2 text-muted">Specs</h5>
+                  <ul className="list-group list-group-flush">
+                    <li className="list-group-item">Manufacturer: {vehicles.manufacturer}</li>
+                    <li className="list-group-item">Class: {vehicles.vehicle_class}</li>
+                    <li className="list-group-item">Passengers: {vehicles.passengers}</li>
+                    <li className="list-group-item">Crew: {vehicles.crew}</li>
+                    <li className="list-group-item">Length: {vehicles.length}</li>
+                    <li className="list-group-item">Max Speed: {vehicles.max_atmosphering_speed}</li>
+                    <li className="list-group-item">Cargo Capacity: {vehicles.cargo_capacity}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    })
     return (
       <div className="App">
-        <Header title="Star Wars" subtitle="The Vehicles of Star Wars" />
-        <Form label="Enter your name, pilot" />
+        <main className="row">
+          <section className="col-md-10 offset-md-1">
+            <div className="jumbotron">
+              <h1 className="display-3">Star Wars</h1> <hr className="my-4" /> <p className="lead">The Vehicles of Star Wars </p>
+            </div>
+            <div className="card form">
+              <div className="card-block">
+                <h2 className="card-title">What is your name, pilot?</h2>
+                <form onSubmit={this.handleSubmit}>
+                  <div className="form-group">
+                    <input className="form-control col-md-4 offset-md-4" id="pilotName" onChange={this.handleNameChange} name="name" type="text" value={this.state.value} placeholder="Enter your name" />
+                  </div>
+                  <button type="submit" className="btn btn-primary">Submit</button>
+                </form>
+                <h1>{this.state.pilot}</h1>
+              </div>
+            </div>
+            <div className="row" >
+              {vehicles}
+            </div>
+          </section>
+        </main>
       </div>
     );
   }
 }
 
 export default App;
+
